@@ -1,0 +1,93 @@
+<p-table #dt [value]="final_data" [(selection)]="selected_data" dataKey="id" [rowHover]="true"
+    [rows]="10" [showCurrentPageReport]="true" [rowsPerPageOptions]="[10,25,50]" 
+    [paginator]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [filterDelay]="0" [globalFilterFields]="['bot_name','version','bot_configuration_id','updated_by','updated_date']">
+    <ng-template pTemplate="caption">
+        <div class="table-header">
+            <span class="p-input-icon-left">
+                <!-- <i class="pi pi-search"></i> -->
+                <input pInputText type="text" (input)="applyFilterGlobal($event, 'contains')" placeholder="Global Search" />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 4rem">
+                <p-tableHeaderCheckbox [value]="final_data" input type="checkbox"></p-tableHeaderCheckbox>
+            </th>
+            <th pSortableColumn="bot_name" style="min-width: 14rem">
+                <div class="flex justify-content-between align-items-center">
+                  BotName
+                    <p-sortIcon type="text" field="bot_name"></p-sortIcon>
+                    <p-columnFilter type="text" field="bot_name" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="version"style="min-width: 14rem">
+                <div class="flex justify-content-between align-items-center">
+                  Version
+                    <p-sortIcon field="version"></p-sortIcon>
+                    <p-columnFilter type="text" field="version" display="menu"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="bot_configuration_id" style="min-width: 14rem">
+                <div class="flex justify-content-between align-items-center">
+                  Bot Configuration Id
+                    <p-sortIcon field="bot_configuration_id"></p-sortIcon>
+                    <p-columnFilter type="text" field="bot_configuration_id" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="updated_by" style="min-width: 10rem">
+                <div class="flex justify-content-between align-items-center">
+                  Owner
+                    <p-sortIcon field="updated_by"></p-sortIcon>
+                    <p-columnFilter type="text" field="updated_by" display="menu" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th pSortableColumn="updated_date" style="min-width: 10rem">
+                <div class="flex justify-content-between align-items-center">
+                  Updated Date
+                    <p-sortIcon field="updated_date"></p-sortIcon>
+                    <p-columnFilter type="text" field="updated_date" display="menu" currency="USD" class="ml-auto"></p-columnFilter>
+                </div>
+            </th>
+            <th></th>
+        
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-final_data let-rowIndex="rowIndex">
+      <tr class="p-selectable-row">
+          <td>
+              <p-tableCheckbox [value]="final_data" input type="checkbox" ></p-tableCheckbox>
+          </td>
+          <td field="bot_name">{{final_data.bot_name}}</td>
+          <td field="version">{{final_data.version}}</td>
+          <td field="bot_configuration_id">{{final_data.bot_configuration_id}}</td>
+          <td field="updated_by">{{final_data.updated_by}}</td>
+          <td field="updated_date">{{final_data.updated_date}}</td>
+          <td><button pButton type="button" (click)="showResponsiveDialog(final_data.bot_configuration_id)" label="Bot Details" class="p-button-help"></button></td>
+      </tr>
+  </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="7">No customers found.</td>
+        </tr>
+    </ng-template>
+  
+</p-table>
+<p-dialog header="Bot Details" [(visible)]="displayResponsive" [breakpoints]="{'960px': '75vw'}" [style]="{width: '50vw'}"
+    [draggable]="false" [resizable]="false">
+    <ng-template pTemplate="body">
+        <div *ngFor="let val of botdetail | keyvalue">
+            <p *ngIf="val.key === 'minimum_cpu_percent_per_core'">Minimum CPU Percent : {{ val.value }}</p>
+            <p *ngIf="val.key === 'minimum_ram'">Minium Ram : {{ val.value }}</p>
+            <p *ngIf="val.key === 'minimum_cpu_percent_per_core'">Minimum CPU Percent : {{ val.value }}</p>
+            <p *ngIf="val.key === 'is_active'">Is Active : {{ val.value }}</p>
+            <p *ngIf="val.key === 'processing_limit'">Processing Limt : {{ val.value }}</p>
+            <p *ngIf="val.key === 'delay_to'">Delay To : {{ val.value }}</p>
+            <p *ngIf="val.key === 'site_id'">Site Id : {{ val.value }}</p>
+        </div>
+
+    </ng-template>
+        <ng-template pTemplate="footer">
+        </ng-template>
+</p-dialog>
